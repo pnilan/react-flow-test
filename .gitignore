@@ -4,6 +4,7 @@ bundle.js
 bundle.js.map
 bundle.js.br
 bundle.js.LICENSE.txt
+public/
 config.js
 coverage/
 jest.config.js
