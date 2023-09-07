@@ -1,23 +1,28 @@
-import React, {useCallback} from 'react';
-import ReactFlow, { useNodesState, useEdgesState, addEdge } from 'reactflow';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+import ReactFlow, { useNodesState, useEdgesState, addEdge, applyNodeChanges, applyEdgeChanges } from 'reactflow';
 
 const initialNodes = [
-  { id: '1', position: { x: 0, y: 0}, data: { label: '1'} },
-  { id: '2', position: { x: 0, y: 100}, data: { label: '2'} },
+  { id: '1', position: { x: 100, y: 100}, data: { label: 'Hello'}, type: 'input' },
+  { id: '2', position: { x: 100, y: 200}, data: { label: 'World'} },
 ];
 
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2'}];
+const initialEdges = [];
 
 const App = () => {
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState(initialEdges);
 
-  const onConnect = useCallback((params) => {
-    setEdges((eds) => {
-      addEdge(params, eds);
-    });
-  }, []);
+  const onNodesChange = useCallback(
+    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    []
+  );
+  const onEdgesChange = useCallback(
+    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+    []
+  );
+
+  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
@@ -33,4 +38,3 @@ const App = () => {
 };
 
 export default App;
-
